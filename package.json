@@ -1,0 +1,15 @@
+{
+  "name": "fractal-workout-minutes-archive",
+  "version": "1.0.0",
+  "description": "FRACTAL WORKOUT の議事録と図解を日付別に見せる共有用Webアーカイブ",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "node server/index.js",
+    "start": "node server/index.js",
+    "check": "node --check server/index.js && node -e \"JSON.parse(require('fs').readFileSync('public/records.json', 'utf8'))\""
+  },
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
