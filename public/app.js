@@ -1,9 +1,11 @@
 const state = {
   records: [],
   selectedId: null,
+  sidebarCollapsed: false,
 };
 
 const ACTION_STATUS_STORAGE_KEY = "fractal-workout-minutes-action-statuses";
+const SIDEBAR_STORAGE_KEY = "fractal-workout-meeting-sidebar-collapsed";
 const ACTION_STATUS_OPTIONS = ["未着手", "進行中", "確認中", "保留", "完了", "未設定"];
 const ACTION_STATUS_KEYS = {
   未着手: "todo",
@@ -15,9 +17,12 @@ const ACTION_STATUS_KEYS = {
 };
 
 const els = {
+  appShell: document.querySelector("#appShell"),
   archiveList: document.querySelector("#archiveList"),
   detailPane: document.querySelector("#detailPane"),
   refreshButton: document.querySelector("#refreshButton"),
+  sidebarToggle: document.querySelector("#sidebarToggle"),
+  sidebarRailToggle: document.querySelector("#sidebarRailToggle"),
   imageLightbox: document.querySelector("#imageLightbox"),
   lightboxImage: document.querySelector("#lightboxImage"),
   lightboxClose: document.querySelector("#lightboxClose"),
@@ -26,13 +31,42 @@ const els = {
 await init();
 
 async function init() {
+  initSidebar();
   els.refreshButton.addEventListener("click", () => loadRecords());
+  els.sidebarToggle.addEventListener("click", toggleSidebar);
+  els.sidebarRailToggle.addEventListener("click", toggleSidebar);
   els.detailPane.addEventListener("click", handleDetailClick);
   els.detailPane.addEventListener("change", handleDetailChange);
   els.imageLightbox.addEventListener("click", handleLightboxClick);
   els.lightboxClose.addEventListener("click", closeLightbox);
   document.addEventListener("keydown", handleDocumentKeydown);
   await loadRecords();
+}
+
+function initSidebar() {
+  setSidebarCollapsed(localStorage.getItem(SIDEBAR_STORAGE_KEY) === "true", { persist: false });
+}
+
+function toggleSidebar() {
+  setSidebarCollapsed(!state.sidebarCollapsed);
+}
+
+function setSidebarCollapsed(collapsed, options = {}) {
+  state.sidebarCollapsed = collapsed;
+  els.appShell.classList.toggle("sidebar-collapsed", collapsed);
+
+  [els.sidebarToggle, els.sidebarRailToggle].forEach((button) => {
+    button.setAttribute("aria-expanded", String(!collapsed));
+    button.setAttribute("aria-label", collapsed ? "左側を開く" : "左側を閉じる");
+    button.setAttribute("title", collapsed ? "左側を開く" : "左側を閉じる");
+  });
+
+  els.sidebarToggle.querySelector("span").textContent = collapsed ? "☰" : "‹";
+  els.sidebarRailToggle.querySelector("span").textContent = collapsed ? "☰" : "‹";
+
+  if (options.persist !== false) {
+    localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
+  }
 }
 
 async function loadRecords() {

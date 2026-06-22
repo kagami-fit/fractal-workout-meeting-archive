@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <aside class="sidebar" aria-label="日付別アーカイブ">
+    <div class="app-shell" id="appShell">
+      <aside class="sidebar" id="sidebar" aria-label="日付別アーカイブ">
         <div class="brand">
           <div>
             <img class="brand-logo" src="./brand/fractal-workout-logo-gray.png" alt="FRACTAL WORKOUT" />
@@ -17,10 +17,19 @@
         </div>
         <div class="sidebar-header">
           <span>日付別</span>
-          <button class="icon-button" id="refreshButton" type="button" aria-label="更新">↻</button>
+          <div class="sidebar-actions">
+            <button class="icon-button" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="左側を閉じる" title="左側を閉じる">
+              <span aria-hidden="true">‹</span>
+            </button>
+            <button class="icon-button" id="refreshButton" type="button" aria-label="更新" title="更新">↻</button>
+          </div>
         </div>
         <nav id="archiveList" class="archive-list"></nav>
       </aside>
+
+      <button class="sidebar-rail-toggle" id="sidebarRailToggle" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="左側を閉じる" title="左側を閉じる">
+        <span aria-hidden="true">☰</span>
+      </button>
 
       <main class="workspace">
         <header class="archive-hero">
